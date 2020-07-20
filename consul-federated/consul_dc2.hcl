@@ -31,25 +31,36 @@ container "1.server.dc2.consul" {
   network {
     name = "network.wan"
   }
+  
+  port {
+    local  = 8501
+    remote = 8501
+    host   = 18601
+  }
 }
 
 
 container "gateway.dc2.consul" {
+  depends_on = ["exec_remote.bootstrap_acl_dc1"]
+
   image   {
     name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
   }
 
   # The following command start a Consul Connect gateway
   command = [
-      "consul",
-      "connect", "envoy",
-      "-mesh-gateway",
-      "-register",
-      "-expose-servers",
-      "-address", "10.6.0.203:443",
-      "-wan-address", "10.7.0.203:443",
-      "--",
-      "-l", "debug"]
+      "/bin/sh", "-c",
+<<EOF
+consul connect envoy \
+-token $(cat /token_dc1.txt) \
+-mesh-gateway \
+-register \
+-expose-servers \
+-address '10.6.0.203:443' \
+-wan-address '10.7.0.203:443' \
+-- -l debug
+EOF
+      ]
 
   network {
     name = "network.dc2"
@@ -80,5 +91,10 @@ container "gateway.dc2.consul" {
   volume {
     source      = "./config/tls"
     destination = "/etc/consul/tls"
+  }
+  
+  volume {
+    source = "${shipyard()}/data/token_dc1.txt"
+    destination      = "/token_dc1.txt"
   }
 }

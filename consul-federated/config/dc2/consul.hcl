@@ -31,6 +31,14 @@ connect {
   enable_mesh_gateway_wan_federation = true
 }
 
+acl {
+  enabled = true
+  default_policy = "deny"
+  down_policy = "extend-cache"
+  enable_token_persistence = true
+  enable_token_replication = true
+}
+
 config_entries {
   # We are using gateways and L7 config set the 
   # default protocol to HTTP
