@@ -39,6 +39,44 @@ container "1.server.dc1.consul" {
   }
 }
 
+exec_remote "bootstrap_acl_dc1" {
+  depends_on = ["container.1.server.dc1.consul"]
+
+  image   {
+    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
+  }
+  
+  network {
+    name = "network.dc1"
+  }
+  
+  network {
+    name = "network.dc2"
+  }
+
+  env {
+    key = "CONSUL_CACERT"
+    value = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
+  }
+
+  cmd = "/scripts/bootstrap_acl.sh"
+  
+  volume {
+    source      = "./config/dc1"
+    destination = "/scripts"
+  }
+  
+  volume {
+    source      = "./config/tls"
+    destination = "/etc/consul/tls"
+  }
+  
+  volume {
+    source      = "${shipyard()}/data"
+    destination = "/output"
+  }
+}
+
 container "gateway.dc1.consul" {
   # Don't start this container until the bootstrapping process has been completed
   depends_on = ["exec_remote.bootstrap_acl_dc1"]
@@ -97,43 +135,5 @@ EOF
   volume {
     source      = "./config/tls"
     destination = "/etc/consul/tls"
-  }
-}
-
-exec_remote "bootstrap_acl_dc1" {
-  depends_on = ["container.1.server.dc1.consul", "container.1.server.dc2.consul"]
-
-  image   {
-    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
-  }
-  
-  network {
-    name = "network.dc1"
-  }
-  
-  network {
-    name = "network.dc2"
-  }
-
-  env {
-    key = "CONSUL_CACERT"
-    value = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
-  }
-
-  cmd = "/scripts/bootstrap_acl.sh"
-  
-  volume {
-    source      = "./config/dc1"
-    destination = "/scripts"
-  }
-  
-  volume {
-    source      = "./config/tls"
-    destination = "/etc/consul/tls"
-  }
-  
-  volume {
-    source      = "${shipyard()}/data"
-    destination = "/output"
   }
 }

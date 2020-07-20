@@ -39,9 +39,46 @@ container "1.server.dc2.consul" {
   }
 }
 
+exec_remote "bootstrap_acl_dc2" {
+  depends_on = ["container.1.server.dc2.consul", "exec_remote.bootstrap_acl_dc1"]
+
+  image   {
+    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
+  }
+  
+  network {
+    name = "network.dc1"
+  }
+  
+  network {
+    name = "network.dc2"
+  }
+
+  env {
+    key = "CONSUL_CACERT"
+    value = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
+  }
+
+  cmd = "/scripts/bootstrap_acl.sh"
+  
+  volume {
+    source      = "./config/dc2"
+    destination = "/scripts"
+  }
+  
+  volume {
+    source      = "./config/tls"
+    destination = "/etc/consul/tls"
+  }
+  
+  volume {
+    source      = "${shipyard()}/data"
+    destination = "/output"
+  }
+}
 
 container "gateway.dc2.consul" {
-  depends_on = ["exec_remote.bootstrap_acl_dc1"]
+  depends_on = ["exec_remote.bootstrap_acl_dc2"]
 
   image   {
     name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
@@ -52,8 +89,8 @@ container "gateway.dc2.consul" {
       "/bin/sh", "-c",
 <<EOF
 consul connect envoy \
--token $(cat /token_dc1.txt) \
 -mesh-gateway \
+-token $(cat /token_dc1.txt) \
 -register \
 -expose-servers \
 -address '10.6.0.203:443' \
