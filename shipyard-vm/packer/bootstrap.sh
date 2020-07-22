@@ -67,3 +67,11 @@ pushd shipyard
 make install_local
 popd
 mv $(which yard-dev) /usr/local/bin/shipyard
+
+cat <<EOH > /usr/local/bin/kd
+#!/bin/bash
+docker rm -f $(docker ps -aq)
+docker volume rm $(docker volume list -q)
+docker network rm $(docker network ls -q)
+EOH
+chmod +x /usr/local/bin/kd

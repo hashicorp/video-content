@@ -18,10 +18,10 @@ resource "google_compute_instance" "default" {
   }
 
   metadata_startup_script = <<EOF
-    users=(${join(" ", var.users)})
-    for user in $${users[@]}; do
-      sudo usermod -aG docker $user
-    done
+users=(${join(" ", var.users)})
+for user in $${users[@]}; do
+  sudo usermod -aG docker $user
+done
   EOF
 
   service_account {
