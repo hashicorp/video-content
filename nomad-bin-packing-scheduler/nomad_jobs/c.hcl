@@ -3,7 +3,7 @@ job "cache" {
     type = "service"
 
     group "cache" {
-        count = 3
+        count = 1
 
         network {
             mode = "bridge"

@@ -3,7 +3,7 @@ job "backend" {
     type = "service"
 
     group "backend" {
-        count = 3
+        count = 1
 
         network {
             mode = "bridge"
