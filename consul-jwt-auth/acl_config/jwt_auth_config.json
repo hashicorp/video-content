@@ -1,0 +1,9 @@
+{
+  "BoundIssuer": "test.com",
+  "JWTValidationPubKeys": [
+      "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0ViGLdlJYnV7Q8TFWNPd\nikHoa0z2eJXlcWla7GG7xfa5Bjv3ks8m9u3lZQDgPneHWeMpVzLzB9lYRiISFS2z\nynqtimHTQyZz7IV7PQgF2NrLQd2PlxETGp1eagoMC/lxHuvmzNT/dXIMzPJfnQDl\nKjqzfUtx+PjxfUWJKZ6evneMcmHTPCHAgzy8HOU4EZm/nEqOZjf7ShHn8LlADeGK\nhTBQWIY7x2ihneMeBuEXq0EkuCGjQab/7k2Q/mdd0NPSR4Au6TXP6zkR+lVdgDRU\n6SM1hRwpboFHopEQCtl0mytmI0M6robQKQr7v4DFQd8SCrD12WEg3fB8ywN7egv6\nMwIDAQAB\n-----END PUBLIC KEY-----"
+  ],
+  "ClaimMappings": {
+      "admin": "admin"
+  }
+}

@@ -1,8 +1,24 @@
-network "dc1" {
-  subnet = "10.5.0.0/16"
+exec_remote "bootstrap_certs" {
+  image   {
+    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
+  }
+  
+  cmd = "/scripts/generate_certs.sh"
+  
+  volume {
+    source      = "./config/tls"
+    destination = "/scripts"
+  }
+  
+  volume {
+    source      = "${data("tls")}"
+    destination = "/output"
+  }
 }
 
 container "1.server.dc1.consul" {
+  depends_on = ["exec_remote.bootstrap_certs"]
+
   image {
     name = "consul:1.8.0"
   }
@@ -20,10 +36,10 @@ container "1.server.dc1.consul" {
   }
   
   volume {
-    source      = "./config/tls"
+    source      = "${data("tls")}"
     destination = "/etc/consul/tls"
   }
-
+  
   network { 
     name = "network.dc1"
   }
@@ -54,9 +70,8 @@ exec_remote "bootstrap_acl_dc1" {
     name = "network.dc2"
   }
 
-  env {
-    key = "CONSUL_CACERT"
-    value = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
+  env_var =  {
+    CONSUL_CACERT = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
   }
 
   cmd = "/scripts/bootstrap_acl.sh"
@@ -67,12 +82,12 @@ exec_remote "bootstrap_acl_dc1" {
   }
   
   volume {
-    source      = "./config/tls"
+    source      = "${data("tls")}"
     destination = "/etc/consul/tls"
   }
   
   volume {
-    source      = "${shipyard()}/data"
+    source      = "${data("tokens")}"
     destination = "/output"
   }
 }
@@ -112,28 +127,19 @@ EOF
 
   # This container does not have a local agent so we are registering the gateway 
   # direct with the server 
-  env {
-    key = "CONSUL_HTTP_ADDR" 
-    value = "https://1.server.dc1.consul.container.shipyard.run:8501"
-  }
-
-  env {
-    key = "CONSUL_GRPC_ADDR"
-    value = "1.server.dc1.consul.container.shipyard.run:8502"
-  }
-
-  env {
-    key = "CONSUL_CACERT"
-    value = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
+  env_var = {
+    CONSUL_HTTP_ADDR = "https://1.server.dc1.consul.container.shipyard.run:8501"
+    CONSUL_GRPC_ADDR = "1.server.dc1.consul.container.shipyard.run:8502"
+    CONSUL_CACERT = "/etc/consul/tls/consul.container.shipyard.run-agent-ca.pem"
   }
   
   volume {
-    source = "${shipyard()}/data/token_dc1.txt"
-    destination      = "/token_dc1.txt"
-  }
-  
-  volume {
-    source      = "./config/tls"
+    source      = "${data("tls")}"
     destination = "/etc/consul/tls"
+  }
+  
+  volume {
+    source = "${data("tokens")}/token_dc1.txt"
+    destination = "/token_dc1.txt"
   }
 }

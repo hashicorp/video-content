@@ -11,7 +11,7 @@ ui = true
 
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
-advertise_addr = "{{GetInterfaceIP \"eth1\"}}"
+advertise_addr = "{{GetInterfaceIP \"eth0\"}}"
 
 key_file  = "/etc/consul/tls/dc1-server-consul.container.shipyard.run-0-key.pem"
 cert_file = "/etc/consul/tls/dc1-server-consul.container.shipyard.run-0.pem"
