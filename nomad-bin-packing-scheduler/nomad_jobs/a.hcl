@@ -6,19 +6,10 @@ job "api" {
         count = 3
 
         network {
-            mode = "cni/bridge"
+            mode = "bridge"
 
             port "http" {
                 to = 9090
-            }
-        }
-
-        service {
-            name = "fml"
-            port = 9090
-
-            connect {
-                sidecar_service {}
             }
         }
 
