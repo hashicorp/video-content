@@ -10,4 +10,9 @@ nomad_cluster "dc1" {
   image {
     name = "nicholasjackson/fake-service:v0.14.1"
   }
+
+  volume {
+    source = "${data("backup")}"
+    destination = "/etc/nomad.d/backup"
+  }
 }
