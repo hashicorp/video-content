@@ -43,20 +43,4 @@ nomad_cluster "dc1" {
   image {
     name = "nicholasjackson/fake-service:v0.14.1"
   }
-
-  volume {
-    source = "./assets/nomad"
-    destination = "/usr/local/bin/nomad"
-  }
-
-  volume {
-    source = "./assets/bridge.json"
-    destination = "/opt/cni/config/bridge.json"
-  }
-
-  
-  volume {
-    source = "./assets/consul.hcl"
-    destination = "/config/consul.hcl"
-  }
 }
