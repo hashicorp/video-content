@@ -17,11 +17,13 @@ job "web" {
       }
 
       port "api" {
-          to = 9090
+        host_network = "dc1"
+        to = 9090
       }
 
       port "admin" {
-          to = 19000
+        host_network = "dc1"
+        to = 19000
       }
     }
 

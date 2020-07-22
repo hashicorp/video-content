@@ -13,7 +13,7 @@ client {
     cidr = "192.168.0.0/16"
   }
 
-  host_network "private" {
+  host_network "dc1" {
     cidr = "10.5.0.0/16"
   }
 }
@@ -21,6 +21,10 @@ EOF
 
   network {
     name = "network.dc1"
+  }
+
+  network {
+    name = "network.wan"
   }
 
   image {
