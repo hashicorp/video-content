@@ -9,7 +9,7 @@ client {
 		retry_join = ["server.dc1.nomad_cluster.shipyard.run"]
 	}
 
-  memory_total_mb = 4000
+  memory_total_mb = 2000
   reserved {
     memory = 20
   }

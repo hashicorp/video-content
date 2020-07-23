@@ -30,7 +30,7 @@ job "low" {
 
             resources {
                 cpu    = 50
-                memory = 64
+                memory = 1024
             }
         }
     }
