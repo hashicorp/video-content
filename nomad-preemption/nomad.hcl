@@ -1,6 +1,21 @@
 nomad_cluster "dc1" {
   version = "v0.12.0"
 
+  server_config = <<EOF
+server {
+  enabled = true
+  bootstrap_expect = 1
+
+  default_scheduler_config {
+    preemption_config {
+      batch_scheduler_enabled   = true
+      system_scheduler_enabled  = true
+      service_scheduler_enabled = true
+    }
+  }
+}
+EOF
+
   client_config = <<EOF
 client {
 	enabled = true
