@@ -1,0 +1,8 @@
+{
+    "name": "calico",
+    "cniVersion": "0.1.0",
+    "type": "calico",
+    "ipam": {
+        "type": "calico-ipam"
+    }
+}

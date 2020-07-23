@@ -6,18 +6,11 @@ job "api" {
         count = 1
 
         network {
-            mode = "bridge"
+            mode = "cni/calico"
 
             port "http" {
                 to = 9090
             }
-        }
-
-        scaling {
-            enabled = true
-            
-            min = 1
-            max = 10
         }
 
         task "api" {
