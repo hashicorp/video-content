@@ -6,7 +6,7 @@ job "api" {
         count = 1
 
         network {
-            mode = "cni/calico"
+            mode = "cni/mynet"
 
             port "http" {
                 to = 9090
