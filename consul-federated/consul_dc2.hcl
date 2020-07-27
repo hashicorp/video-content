@@ -3,7 +3,7 @@ container "1.server.dc2.consul" {
   depends_on = ["exec_remote.bootstrap_certs"]
 
   image {
-    name = "consul:1.8.0"
+    name = "consul:${var.consul_version}"
   }
   
   command = [
@@ -42,7 +42,7 @@ exec_remote "bootstrap_acl_dc2" {
   depends_on = ["container.1.server.dc2.consul", "exec_remote.bootstrap_acl_dc1"]
 
   image   {
-    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
+    name = "nicholasjackson/consul-envoy:v${var.consul_version}-v${var.envoy_version}"
   }
   
   network {
@@ -80,7 +80,7 @@ container "gateway.dc2.consul" {
   depends_on = ["exec_remote.bootstrap_acl_dc2"]
 
   image   {
-    name = "nicholasjackson/consul-envoy:v1.8.0-v1.12.4"
+    name = "nicholasjackson/consul-envoy:v${var.consul_version}-v${var.envoy_version}"
   }
 
   # The following command start a Consul Connect gateway

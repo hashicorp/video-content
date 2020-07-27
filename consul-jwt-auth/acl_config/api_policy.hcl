@@ -14,7 +14,7 @@ service "api" {
 	policy = "write"
 }
 
-service_prefix "api-1-sidecar-proxy" {
+service "api-sidecar-proxy" {
 	policy = "write"
 }
 
