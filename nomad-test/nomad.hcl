@@ -1,6 +1,8 @@
 nomad_cluster "dc1" {
   version = "v0.12.0"
 
+  client_nodes = 3
+
   network {
     name = "network.dc1"
   }
